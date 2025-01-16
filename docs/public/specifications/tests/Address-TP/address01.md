@@ -114,9 +114,8 @@ message. The argument names are defined in the [Argument list].
 ```mermaid
 graph TD;
     A[Create empty data sets] --> B[Get-Del-NS-Names-and-IPs]
-    B --> C[Get-Zone-NS-Names-and-IPs]
-    C --> D[At least 1 NS in set?] 
-    D -- no --> R[A01_NO_NAME_SERVERS_FOUND]
+    B --> C[At least 1 NS in set?] 
+    C -- no --> R[A01_NO_NAME_SERVERS_FOUND]
     R --> X[Exit test]
     C -- yes --> D[Select first unprocessec NS in list]
     D --> E[Match IP against Special Purpose IP Lists]
@@ -124,7 +123,10 @@ graph TD;
     F -- yes --> G[Which?]
     G -- Documentation? --> H[Add to Documentation set]
     G -- Local? --> I[Add to Local Use set]
-    G --> Other? --> J[Add to Not Globally Reachable set]
+    G -- Other? --> J[Add to Not Globally Reachable set]
+    H --> K
+    I --> K
+    J --> K
     F -- no --> K[All nameservers processed?]
     K -- no --> D
     K -- Yes --> L[All Special IP sets empty?]
