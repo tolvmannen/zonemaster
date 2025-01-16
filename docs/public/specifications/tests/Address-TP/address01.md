@@ -133,9 +133,9 @@ graph TD;
     L -- yes --> M[Output: A01_ADDR_GLOBALLY_REACHABLE]
     M --> X
     L -- no --> N[Documentation set Empty?]
-    N -- no --> O[Output: A01_ADDR_GLOBALLY_REACHABLE]
+    N -- no --> O[Output: A01_DOCUMENTATION_ADDR]
     O --> P[Local Use set empty?]
-    O -- no --> Q[output: A01_LOCAL_USE_ADDR]
+    P -- no --> Q[output: A01_LOCAL_USE_ADDR]
     Q --> S[Not Globally Reachable set empty?]
     S -- no --> T[Output: A01_ADDR_NOT_GLOBALLY_REACHABLE] 
     T --> U[Union of Special Purpose list equal to NS List?]
