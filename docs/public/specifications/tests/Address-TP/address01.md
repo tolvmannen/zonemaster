@@ -144,7 +144,7 @@ graph TD;
     N -- yes --> P
     P -- yes --> S
     S -- yes --> U
-    T -- no --> X
+    U -- no --> X
     
 ```
   
