@@ -139,7 +139,7 @@ graph TD;
     Q --> S[Not Globally Reachable set empty?]
     S -- no --> T[Output: A01_ADDR_NOT_GLOBALLY_REACHABLE] 
     T --> U[Union of Special Purpose list equal to NS List?]
-    T -- yes --> V[Output: A01_NO_GLOBALLY_REACHABLE_ADDR]
+    U -- yes --> V[Output: A01_NO_GLOBALLY_REACHABLE_ADDR]
     V --> X
     N -- yes --> P
     P -- yes --> S
