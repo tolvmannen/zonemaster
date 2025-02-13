@@ -8,7 +8,7 @@
   * [Installation on FreeBSD](#installation-on-freebsd)
 * [Post-installation sanity check](#post-installation-sanity-check)
 * [Troubleshooting installation](#troubleshooting-installation)
-* [Global cache (experimental feature)](#global-cache-experimental-feature)
+* [Global cache](#global-cache)
 * [What to do next](#what-to-do-next)
 
 
@@ -39,7 +39,7 @@
 4) Install binary packages:
 
    ```sh
-   sudo dnf --assumeyes install cpanminus gcc libidn2-devel openssl-devel perl-Class-Accessor perl-Clone perl-core perl-Devel-CheckLib perl-Email-Valid perl-ExtUtils-PkgConfig perl-File-ShareDir perl-File-Slurp perl-libintl perl-IO-Socket-INET6 perl-List-Compare perl-List-MoreUtils perl-Mail-SPF perl-Module-Find perl-Module-Install perl-Net-DNS perl-Pod-Coverage perl-Readonly perl-Sub-Override perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-NoWarnings perl-Test-Pod perl-Text-CSV perl-Test-Simple
+   sudo dnf install --assumeyes cpanminus gcc libidn2-devel openssl-devel perl-Class-Accessor perl-Clone perl-core perl-Devel-CheckLib perl-Email-Valid perl-ExtUtils-PkgConfig perl-File-ShareDir perl-File-Slurp perl-libintl perl-IO-Socket-INET6 perl-List-Compare perl-List-MoreUtils perl-Mail-SPF perl-Module-Find perl-Module-Install perl-Net-DNS perl-Pod-Coverage perl-Readonly perl-Sub-Override perl-Test-Differences perl-Test-Exception perl-Test-Fatal perl-Test-NoWarnings perl-Test-Pod perl-Text-CSV perl-Test-Simple
    ```
 
 5) Install packages from CPAN:
@@ -168,11 +168,11 @@ installation above but without the `--notest` and with the `--verbose` option.
 Installation will take longer time.
 
 
-## Global cache (experimental feature)
+## Global cache
 
-Global cache is an experimental feature that can be enabled in Zonemaster-Engine
-and that can increase the performance when many tests are run within a short time
-frame. See [global cache configuration].
+Global cache is a feature that can be enabled in Zonemaster-Engine and consists
+in a shared, persistent cache. It can increase the performance when many tests
+are run within a short time frame. See [global cache configuration].
 
 
 ## What to do next

@@ -6,6 +6,7 @@ src = "./"
 
 [output.html]
 no-section-label = true
+additional-js = ["mermaid.min.js", "mermaid-init.js"]
 
 [output.html.fold]
 enable = true
@@ -13,5 +14,8 @@ level = 1
 
 [preprocessor.index]
 
+[preprocessor.mermaid]
+command = "mdbook-mermaid"
+
 [output.linkcheck]
-follow-web-links = true
+follow-web-links = false
