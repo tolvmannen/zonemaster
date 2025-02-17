@@ -101,51 +101,177 @@ message. The argument names are defined in the [Argument list].
 7. If the *Documentation Address* set is non-empty, then output 
    *[A01_DOCUMENTATION_ADDR]* with a list of name server names and IP addresses
    from the set.
-9. If the *Local Use Address* set is non-empty, then output 
+8. If the *Local Use Address* set is non-empty, then output 
    *[A01_LOCAL_USE_ADDR]* with a list of name server names and IP addresses
    from the set.
-10. If the *Not Globally Reachable* set is non-empty, then output 
+9. If the *Not Globally Reachable* set is non-empty, then output 
     *[A01_ADDR_NOT_GLOBALLY_REACHABLE]* with a list of name server names and 
     IP addresses from the set.
-11. If the union of the *Documentation Address*, *Local Use Address* and 
+10. If the union of the *Documentation Address*, *Local Use Address* and 
     *Not Globally Reachable* sets is equal to the *Name Server IP* set,
     then output *[A01_NO_GLOBALLY_REACHABLE_ADDR]* 
 
 ```mermaid
 graph TD;
-    A[Create empty data sets] --> B[Get-Del-NS-Names-and-IPs]
-    B --> C[At least 1 NS in set?] 
-    C -- no --> R[A01_NO_NAME_SERVERS_FOUND]
-    R --> X[Exit test]
-    C -- yes --> D[Select first unprocessec NS in list]
-    D --> E[Match IP against Special Purpose IP Lists]
-    E --> F[Found IP in List?]
-    F -- yes --> G[Which?]
-    G -- Documentation? --> H[Add to Documentation set]
-    G -- Local? --> I[Add to Local Use set]
-    G -- Other? --> J[Add to Not Globally Reachable set]
-    H --> K
-    I --> K
-    J --> K
-    F -- no --> K[All nameservers processed?]
-    K -- no --> D
-    K -- Yes --> L[All Special IP sets empty?]
-    L -- yes --> M[Output: A01_ADDR_GLOBALLY_REACHABLE]
-    M --> X
-    L -- no --> N[Documentation set Empty?]
-    N -- no --> O[Output: A01_DOCUMENTATION_ADDR]
-    O --> P[Local Use set empty?]
-    P -- no --> Q[output: A01_LOCAL_USE_ADDR]
-    Q --> S[Not Globally Reachable set empty?]
-    S -- no --> T[Output: A01_ADDR_NOT_GLOBALLY_REACHABLE] 
-    T --> U[Union of Special Purpose list equal to NS List?]
-    U -- yes --> V[Output: A01_NO_GLOBALLY_REACHABLE_ADDR]
-    V --> X
-    N -- yes --> P
-    P -- yes --> S
-    S -- yes --> U
-    U -- no --> X
-    
+
+1["`
+   Create the following empty sets:
+      1. Name server name and IP address (Name Server IP).
+      2. Name server name and IP address (Documentation Address).
+      3. Name server name and IP address (Local Use Address).
+      4. Name server name and IP address (Not Globally Reachable).
+`"]
+2["`
+   Obtain the address records of each name server for the *Child Zone* 
+   from the parent using the method [Get-Del-NS-Names-and-IPs] and 
+   add them to the *Name Server IP* set. 
+`"]
+3["` 
+   Obtain the IP addresses of each name server for the domain using the method 
+   [Get-Zone-NS-Names-and-IPs] and add any non-duplicate results to 
+   *Name Server IP* set. 
+`"]
+
+IF1{"`
+   Is the length 
+   of the set > 1 ? 
+`"}
+
+4["`
+   Output *[A01_NO_NAME_SERVERS_FOUND]*
+`"]
+5["`
+   Select the first unprocessed NS in the list and
+   match against the Special Purpose IP Lists.
+`"]
+5.1["`
+   Found match in any of the address ranges reserved for 
+   *Documentation*? 
+`"]
+5.1.1["`
+   Add the name server name and IP address 
+   to the *Documentation Address* set,
+`"]
+5.2["`
+   Found match in any of the address ranges below? 
+   • *Private-Use (IPv4)*
+   • *Loopback (IPv4)*
+   • *Loopback Address (IPv6)*
+   • *Link Local (IPv4)*
+   • *Link-Local Unicast* (IPv6)
+   • *Unique-Local* (IPv6)
+   • *Shared Address Space* (IPv6)
+`"]
+5.2.1["`
+   Add the name server name and IP address 
+   to the *Local Use Adddress* set.
+`"]
+5.3["`
+   Found match in any of the address ranges that are
+   **not** listed as *Globally Reachable*?
+`"]
+5.3.1["`
+   Add the name server name and IP address 
+   to the *Not Globally Reachable* set.
+`"]
+5.4["`
+   Have all nameservers in tha list been processed?
+`"]
+6["`
+   Are the following sets empty?
+   • *Documentation Address*
+   • *Local Use Adddress* 
+   • *Not Globally Reachable*
+`"]
+6.1["`
+   Output
+   *[A01_ADDR_GLOBALLY_REACHABLE]*
+`"]
+7["`
+   Is the *Documentation Address* set is empty?
+`"]
+7.1["`
+   Output
+   *[A01_DOCUMENTATION_ADDR]* with a list of 
+   name server names and IP addresses in 
+   the set.
+`"]
+8["`
+   Is the *Local Use Address* set is empty?
+`"]
+8.1["`
+   Output
+   *[A01_LOCAL_USE_ADDR]* with a list of 
+   name server names and IP addresses in 
+   the set.
+`"]
+9["`
+   Is the *Not Globally Reachable* set is empty?
+`"]
+9.1["`
+   Output
+   *[A01_ADDR_NOT_GLOBALLY_REACHABLE]* with a 
+   list of name server names and IP addresses 
+   in the set.
+`"]
+10["`
+   Is the union of the following sets equal to the 
+   *Name Server IP* set?
+   • *Documentation Address*
+   • *Local Use Address* 
+   • *Not Globally Reachable*
+`"]
+10.1["`
+    Output
+   *[A01_NO_GLOBALLY_REACHABLE_ADDR]*
+`"]
+
+
+END["`
+   End the test.
+`"]
+
+
+    classDef default white-space:nowrap,text-align:left;
+
+    click R #summary" "link"
+
+    1 --> 2
+    2 --> 3 
+    3 --> IF1 
+    IF1 -- no --> 4
+    4 --> END
+    IF1 -- yes --> 5
+    5 --> 5.1
+    5.1 -- yes --> 5.1.1
+    5.1 -- no --> 5.2
+    5.2 -- yes --> 5.2.1
+    5.2 -- no --> 5.3
+    5.3 -- yes --> 5.3.1
+    5.3 -- no --> 5.4
+   
+    5.1.1 --> 5.4
+    5.2.1 --> 5.4
+    5.3.1 --> 5.4
+
+    5.4 -- no --> 5
+    5.4 -- yes --> 6
+    6 -- yes --> 6.1
+    6 -- no --> 7
+    6.1 --> END
+    7 -- yes --> 8
+    7 -- no --> 7.1
+    7.1 --> 8
+    8 -- yes --> 9
+    8 -- no --> 8.1
+    8.1 --> 9
+    9 -- yes --> 10
+    9 -- no --> 9.1
+    9.1 --> 10
+    10 -- yes --> 10.1
+    10 -- no --> END
+    10.1 --> END
+
 ```
   
 ## Outcome(s)
